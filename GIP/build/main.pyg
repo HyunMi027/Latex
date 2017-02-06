@@ -1,0 +1,23 @@
+#include <ArduinoJson.h>
+
+// Deserializatie
+// memory buffer voor json data
+DynamicJsonBuffer  jsonBuffer
+// deserializatie
+JsonObject& root = jsonBuffer.parseObject(jsonString);
+// test of de deserializatie successvol was
+if (!root.success())
+{
+    Serial.println("parseObject() failed");
+    return;
+}
+
+
+// Serializatie
+// memory buffer voor json data
+DynamicJsonBuffer  jsonBuffer
+JsonObject& root = jsonBuffer.createObject();
+// data toevoegen aan het json object
+root["time"] = 1351824120;
+// print data naar seriële poort
+root.printTo(Serial);

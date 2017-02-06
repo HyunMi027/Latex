@@ -24,8 +24,14 @@
 \usepackage{lastpage}
 \usepackage{rotating, graphicx}
 \usepackage{wrapfig}
+\pgfplotsset{compat=newest}
 
-% footer defs
+% Latex Custom Build Commands
+% !TEX outputDirectory = build
+% !TEX outputFormat = pdf
+% !TEX enableShellEscape = true
+
+% footnote footers
 \DeclareNewFootnote{A}
 
 \MakePerPage{footnote}
@@ -58,25 +64,10 @@
 % bibliography management
 \addbibresource{bronnen.bib}
 
-\pgfplotsset{compat=newest}
-
-% Header sizes
+% Header sizes and fonts
 \sectionfont{\fontsize{11}{14}\selectfont}
 \subsectionfont{\fontsize{10}{13}\selectfont}
 \subsubsectionfont{\fontsize{9}{12}\selectfont}
-
-% colors
-\definecolor{Earth}{rgb}{0.368417,0.506779,0.709798}
-\definecolor{Garnet}{rgb}{0.880722,0.611041,0.142051}
-\definecolor{Opal}{rgb}{0.560181,0.691569,0.194885}
-\definecolor{Sapphire}{rgb}{0.922526,0.385626,0.209179}
-\definecolor{Steel}{rgb}{0.528488,0.470624,0.701351}
-\definecolor{Sunrise}{rgb}{0.772079,0.431554,0.102387}
-\definecolor{codegray}{gray}{0.9}
-
-% Header and footers
-\pagestyle{fancy}
-\fancyhf{}
 
 % Title page
 \author{Laurens Ketsman}
@@ -92,33 +83,47 @@
 % minted code style
 \usemintedstyle{vs}
 
-% custom commands
+% Overbar
 \newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
 
-% add blank pages
+% add blank page command
 \newcommand\blankpage{%
     \null
     \thispagestyle{empty}%
     \addtocounter{page}{-1}%
     \newpage}
 
-% inline code
+% Inline code
 \newcommand{\code}[1]{{\texttt{#1}}}
+% Inline code with gray color box background
+\definecolor{codegray}{gray}{0.9}
+\newcommand{\codeColored}[1]{\colorbox{codegray}{\texttt{#1}}}
 
 \begin{document}
 
-\clearpage\maketitle
+% Titl page
+\clearpage
+\maketitle
 \thispagestyle{empty}
 
+% Blank page
 \blankpage
 
+% Table of contens
 \tableofcontents
 \thispagestyle{empty}
 
+% Voorwoord
 \newpage
-\section*{Voorwoord}
+\chapter*{Voorwoord}
 \thispagestyle{empty}
+\newpage
 
+% Header
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
+\fancyhead[LE]{\thepage\ \rule[-0.25em]{0.14em}{1.3em}\ \rightmark}
 % apply fancyhdr to chapter pages
 \fancypagestyle{plain}{%
   \fancyhf{}%
@@ -126,13 +131,10 @@
     \fancyhead[LE]{\thepage\ \rule[-0.25em]{0.14em}{1.3em}\ \rightmark}
 }
 
-\fancyfoot{}
-\fancyhead[RO]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
-\fancyhead[LE]{\thepage\ \rule[-0.25em]{0.14em}{1.3em}\ \rightmark}
-
-\newpage
+% Titraties achtergrond
 \chapter{Titraties achtergrond}
 
+% Arduino ontwrp
 \chapter{Arduino Ontwerp}
 \section{Wat is een Arduino?}
 Arduino is een volledig platform van open-source hardware\footnote{Hardware waarvan het hardware design volledig open en beschikbaar is zodat anderen het kunnen namaken of uitbreidingen op kunnen voortbouwen.}. Voornamelijk is het een kleine maar veelzijdige microcontroller\footnote{Een kleine computer op 1 printplaat.} die volledig programmeerbaar en uit te breiden is.
@@ -159,7 +161,7 @@ De seriële communicatie is een tekst gebaseerd protocol. Dit wil zeggen dat all
 Alle computersystemen opereren via bits. Dit wil zeggen dat we bepaalde afspraken moeten maken wanneer we verschillende types data willen voorstellen zoals bv tekst of getallen. Deze afspraken rond tekst noemen we de codering van de tekst. Het is belangrijk dat beide partijen van de communicatie weten op welke manier ze de reeks bits van de andere partij moeten interpreteren.\\\\
 ASCII\footnote{American Standard Code for Information Interchange} was vroeger een veelgebruikte coderingsset. Deze coderingsset was ontworpen in amerika door ASA\footnote{American Standards Association} in 1963. We vinden deze vandaag nog steeds vaak terug in apparaten zoals kleine LCD schermen en online op websites. Waar het tot en met 2007 de meest populaire coderingsset was. Sindsdien heeft UTF-8\footnote{Een tekst coderingsset die maximaal 8 bytes per karakter gebruikt. Vaak vernoemt als Unicode (Universal coded character set)} de leiding overgenomen. Momenteel is 88.5\% van alle webpaginas in UTF-8\cite{UnicodeStatistics}. Deze grote sprong in populariteit is te wijten aan de grote variateit van karakters die UTF-8 kan coderen, bijna alle mogelijke karakters. Dit is iets wat ASCII niet kan. Deze limitatie van ASCII valt te wijten aan de structuur van de coderingsset. ASCII gebruikt maar 1 byte, UTF-8 kan maximaal 4 bytes gebruiken.
 \subsection{Protocol}
-Voor seriële communicatie tussen de Arduino en externe apparaten vlot te laten verlopen zullen we een protocol\footnote{Set regels die defineren hoe er zal gecommuniceerd worden tussen apparaten} moeten ontwerpen. 
+Voor seriële communicatie tussen de Arduino en externe apparaten vlot te laten verlopen zullen we een protocol\footnote{Set regels die defineren hoe er zal gecommuniceerd worden tussen apparaten} moeten ontwerpen.
 Voor we beginnen met het ontwerpen van een protocol kijken we best eerst naar welke noden we hebben en welke functionaliteit we tot onze beschikking hebben om in deze noden te voorzien. Daarna kunnen we kijken of anderen al geen oplossing hebben gemaakt. Arduino is namelijk open-source (hardware en software\footnote{open-source software is software waarvan de broncode publiek ter beschikking is gesteld}) dus er bestaat een goede kans dat we een oplossing kunnen vinden zonder er zelf 1 te hoeven ontwerpen. De functionaliteit die we tot onze beschikking hebben staat hierboven al beschreven wat ons nog rest dan is onze noden voor het protocol in kaart brengen.
 \\\\
 Ons protocol moet voornamelijk data kunnen uitwisselen maar ook enkele instructies ondersteunen, deze kunnen we onderverdelen in de volgende aspecten.
@@ -240,6 +242,8 @@ Pulse width modulation is de term die gebruikt word om een speciaal type van dig
     \includegraphics[width=0.7\textwidth]{pwm.jpeg}
     \caption{Een voorbeeld van een PWM signaal}
 \end{figure}
+
+\newpage
 
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
@@ -566,10 +570,38 @@ Moet nog uitgevoerd worden.
     \item Het effectieve labo was makkelijk uit te voeren maar heb titratie van H\textsubscript{2}SO\textsubscript{4} met NaOH niet kunnen uitvoeren mits tijdsgebrek. Ik had het gedeelte met H\textsubscript{2}SO\textsubscript{4} vooraf niet gepland maar tijdens het labo zag ik dat ik nog tijd over had en probeerde die tijd dan ook te gebruiken maar heb het alleen maar manueel kunnen uitvoeren.
 \end{itemize}
 
+% Bibliographie en bijlagen
 \printbibliography
 
 \begin{appendices}
-\chapter{Data}
+\chapter{Arduino technische specificaties}
+\begin{tabular}{|l|l|}
+  \hline
+  Microcontroller & ATmega328P\\\hline
+  Operating Voltage & 5V\\\hline
+  Input Voltage (recommended) & 7-12V\\\hline
+  Input Voltage (limit) & 6-20V\\\hline
+  Digital I/O Pins & 14 (of which 6 provide PWM output)\\\hline
+  PWM Digital I/O Pins & 6\\\hline
+  Analog Input Pins &	6\\\hline
+  DC Current per I/O Pin & 20 mA\\\hline
+  DC Current for 3.3V Pin & 50 mA\\\hline
+  Flash Memory & 32 KB (ATmega328P) of which 0.5 KB used by bootloader\\\hline
+  SRAM & 2 KB (ATmega328P)\\\hline
+  EEPROM & 1 KB (ATmega328P)\\\hline
+  Clock Speed & 16 MHz\\\hline
+  LED\_BUILTIN & 13\\\hline
+  Length & 68.6 mm\\\hline
+  Width & 53.4 mm\\\hline
+  Weight & 25 g\\\hline
+  \end{tabular}
+
+  \newpage
+  \begin{sidewaysfigure}
+          \includegraphics[width=\textwidth]{ArduinoStroomschema.png}
+  \end{sidewaysfigure}
+
+\chapter{Labo gegevens}
 \begin{longtable}{|c|c||c|c||c|c|}
     \hline
     $V_{HCl,a}$ (L) & $pH_{HCl,a}$ & $V_{HCl,b}$ (L) & $pH_{HCl,b}$ & $V_{HCl,c}$ (L) & $pH_{HCl,c}$ \\\hline
@@ -1299,33 +1331,5 @@ Moet nog uitgevoerd worden.
  & &  & & .03582 & 2.84\\\hline
 \end{longtable}
 
-\chapter{Arduino technische specificaties}
-\begin{tabular}{|l|l|}
-    \hline
-Microcontroller & ATmega328P\\\hline
-Operating Voltage & 5V\\\hline
-Input Voltage (recommended) & 7-12V\\\hline
-Input Voltage (limit) & 6-20V\\\hline
-Digital I/O Pins & 14 (of which 6 provide PWM output)\\\hline
-PWM Digital I/O Pins & 6\\\hline
-Analog Input Pins &	6\\\hline
-DC Current per I/O Pin & 20 mA\\\hline
-DC Current for 3.3V Pin & 50 mA\\\hline
-Flash Memory & 32 KB (ATmega328P) of which 0.5 KB used by bootloader\\\hline
-SRAM & 2 KB (ATmega328P)\\\hline
-EEPROM & 1 KB (ATmega328P)\\\hline
-Clock Speed & 16 MHz\\\hline
-LED\_BUILTIN & 13\\\hline
-Length & 68.6 mm\\\hline
-Width & 53.4 mm\\\hline
-Weight & 25 g\\\hline
-\end{tabular}
-
-\newpage
-\begin{sidewaysfigure}
-        \includegraphics[width=\textwidth]{ArduinoStroomschema.png}
-\end{sidewaysfigure}
-
 \end{appendices}
-
 \end{document}

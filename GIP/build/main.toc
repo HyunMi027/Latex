@@ -1,0 +1,73 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {dutch}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Titraties achtergrond}{4}{chapter.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Arduino Ontwerp}{5}{chapter.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Wat is een Arduino?}{5}{section.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Waar worden Arduinos gebruikt?}{5}{section.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Seri\IeC {\"e}le communicatie}{5}{section.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.1}String codering}{6}{subsection.2.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.2}Protocol}{6}{subsection.2.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.3.2.1}Klasse diagrammen}{6}{subsubsection.2.3.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.3.2.2}Implementatie}{7}{subsubsection.2.3.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{\numberline {2.3.2.2.1}JSON (de)serialisatie}{7}{paragraph.2.3.2.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}Pins}{7}{section.2.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.1}Verschil digitale analoge pins}{7}{subsection.2.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.2}Digitale pins}{7}{subsection.2.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.4.2.1}PWM - Pulse Width Modulation}{7}{subsubsection.2.4.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.3}Analoge pins}{8}{subsection.2.4.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Labo}{9}{chapter.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Onderzoeksvraag}{9}{section.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Meetprincipe}{9}{section.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}Benodigdheden}{9}{section.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}Werkwijze en opstelling}{10}{section.3.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Metingen en analyze}{11}{section.3.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.1}Constanten en formules}{11}{subsection.3.5.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.2}Handmatig}{12}{subsection.3.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.1}Gegevens}{12}{subsubsection.3.5.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.2}Berekeningen}{12}{subsubsection.3.5.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.3}Resultaten}{13}{subsubsection.3.5.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.3}Arduino}{14}{subsection.3.5.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.3.1}Gegevens}{14}{subsubsection.3.5.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.3.2}Resultaten}{17}{subsubsection.3.5.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.4}Professionele machine}{18}{subsection.3.5.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.6}Besluiten}{18}{section.3.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.7}Reflectie}{18}{section.3.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Appendices}{20}{section*.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}Arduino technische specificaties}{21}{B"ylage.1.A}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {B}Labo gegevens}{23}{B"ylage.1.B}

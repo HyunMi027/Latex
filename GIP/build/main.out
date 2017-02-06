@@ -1,0 +1,26 @@
+\BOOKMARK [0][-]{chapter.1}{Titraties achtergrond}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Arduino Ontwerp}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Wat is een Arduino?}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Waar worden Arduinos gebruikt?}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.3}{Seri\353le communicatie}{chapter.2}% 5
+\BOOKMARK [2][-]{subsection.2.3.1}{String codering}{section.2.3}% 6
+\BOOKMARK [2][-]{subsection.2.3.2}{Protocol}{section.2.3}% 7
+\BOOKMARK [1][-]{section.2.4}{Pins}{chapter.2}% 8
+\BOOKMARK [2][-]{subsection.2.4.1}{Verschil digitale analoge pins}{section.2.4}% 9
+\BOOKMARK [2][-]{subsection.2.4.2}{Digitale pins}{section.2.4}% 10
+\BOOKMARK [2][-]{subsection.2.4.3}{Analoge pins}{section.2.4}% 11
+\BOOKMARK [0][-]{chapter.3}{Labo}{}% 12
+\BOOKMARK [1][-]{section.3.1}{Onderzoeksvraag}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.2}{Meetprincipe}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.3}{Benodigdheden}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.4}{Werkwijze en opstelling}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.5}{Metingen en analyze}{chapter.3}% 17
+\BOOKMARK [2][-]{subsection.3.5.1}{Constanten en formules}{section.3.5}% 18
+\BOOKMARK [2][-]{subsection.3.5.2}{Handmatig}{section.3.5}% 19
+\BOOKMARK [2][-]{subsection.3.5.3}{Arduino}{section.3.5}% 20
+\BOOKMARK [2][-]{subsection.3.5.4}{Professionele machine}{section.3.5}% 21
+\BOOKMARK [1][-]{section.3.6}{Besluiten}{chapter.3}% 22
+\BOOKMARK [1][-]{section.3.7}{Reflectie}{chapter.3}% 23
+\BOOKMARK [0][-]{section*.4}{Appendices}{}% 24
+\BOOKMARK [0][-]{B"ylage.1.A}{Arduino technische specificaties}{}% 25
+\BOOKMARK [0][-]{B"ylage.1.B}{Labo gegevens}{}% 26
