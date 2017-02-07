@@ -1,2 +1,5 @@
+build
 build/*
+build/*.run.xml
 *.synctex.gz
+*.pdf
