@@ -14,8 +14,7 @@
 \usepackage{hyperref}
 \usepackage{makecell}
 \usepackage{fancyhdr}
-\usepackage{minted}
-\usepackage{biblatex}
+\usepackage{listings}
 \usepackage{mathtools}
 \usepackage[toc,page]{appendix}
 \usepackage{longtable}
@@ -24,6 +23,8 @@
 \usepackage{lastpage}
 \usepackage{rotating, graphicx}
 \usepackage{wrapfig}
+\usepackage{csquotes}
+\usepackage[style=numeric-comp,citestyle=numeric-comp]{biblatex}
 \pgfplotsset{compat=newest}
 
 % Latex Custom Build Commands
@@ -61,9 +62,6 @@
 % inf symbol
 \def\infinity{\rotatebox{90}{8}}
 
-% bibliography management
-\addbibresource{bronnen.bib}
-
 % Header sizes and fonts
 \sectionfont{\fontsize{11}{14}\selectfont}
 \subsectionfont{\fontsize{10}{13}\selectfont}
@@ -80,9 +78,6 @@
 % Graphics path
 \graphicspath{{img/}}
 
-% minted code style
-\usemintedstyle{vs}
-
 % Overbar
 \newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
 
@@ -98,6 +93,16 @@
 % Inline code with gray color box background
 \definecolor{codegray}{gray}{0.9}
 \newcommand{\codeColored}[1]{\colorbox{codegray}{\texttt{#1}}}
+
+% line breaks
+\newcommand{\pbr}{\hfill\break\hfill\break}
+\newcommand{\lbr}{\hfill\break}
+
+% Remove paragraph indentation
+\setlength\parindent{0pt}
+
+% Bibliography management
+\bibliography{bronnen}
 
 \begin{document}
 
@@ -138,10 +143,10 @@
 \chapter{Arduino Ontwerp}
 \section{Wat is een Arduino?}
 Arduino is een volledig platform van open-source hardware\footnote{Hardware waarvan het hardware design volledig open en beschikbaar is zodat anderen het kunnen namaken of uitbreidingen op kunnen voortbouwen.}. Voornamelijk is het een kleine maar veelzijdige microcontroller\footnote{Een kleine computer op 1 printplaat.} die volledig programmeerbaar en uit te breiden is.
-\\\\
+\pbr
 Het grote voordeel van een Arduino is dat deze relatief goedkoop is maar wel een grote flexibiliteit en vooral veelzijdigheid bied voor die prijs. Er zijn teveneens ook veel uitbreidingen en documentatie beschikbaar wat het een nummer 1 keuze maakt voor doe-het-zelf projecten.
-\\\\
-In dit project zullen we gebruikmaken van de Arduino UNO rev3.\\
+\pbr
+In dit project zullen we gebruikmaken van de Arduino UNO rev3.\lbr
 Deze beschikt over:
 \begin{itemize}
     \item 1 USB connectie voor seriële communicatie met de microcontroller
@@ -155,17 +160,18 @@ Volledige specificaties kunnen teruggevonden worden op de Arduino site\footnote{
 Arduinos worden vaak gebruikt door individuen voor hun projecten waar automatisatie nodig is zoals een rookdetector, weerstation, digitale klok enz. Maar we vinden ze ook terug in wetenschappelijke apparatuur zoals waterkwaliteit controlestations en hier.
 \section{Seriële communicatie}
 Seriële communicatie met de Arduino is mogelijk via de USB connectie. Dit maakt het mogelijk om via de Arduino gegevens te sturen naar externe apparaten of via externe apparaten gegevens te sturen naar de Arduino.
-\\\\
-De seriële communicatie is een tekst gebaseerd protocol. Dit wil zeggen dat alle communicatie gebeurt via strings\footnote{Een "string" is de benaming die word gegeven aan een reeks karakters in een bepaalde codering in programmeren.}.\\
+\pbr
+De seriële communicatie is een tekst gebaseerd protocol. Dit wil zeggen dat alle communicatie gebeurt via strings\footnote{Een "string" is de benaming die word gegeven aan een reeks karakters in een bepaalde codering in programmeren.}.\lbr
 \subsection{String codering}
-Alle computersystemen opereren via bits. Dit wil zeggen dat we bepaalde afspraken moeten maken wanneer we verschillende types data willen voorstellen zoals bv tekst of getallen. Deze afspraken rond tekst noemen we de codering van de tekst. Het is belangrijk dat beide partijen van de communicatie weten op welke manier ze de reeks bits van de andere partij moeten interpreteren.\\\\
-ASCII\footnote{American Standard Code for Information Interchange} was vroeger een veelgebruikte coderingsset. Deze coderingsset was ontworpen in amerika door ASA\footnote{American Standards Association} in 1963. We vinden deze vandaag nog steeds vaak terug in apparaten zoals kleine LCD schermen en online op websites. Waar het tot en met 2007 de meest populaire coderingsset was. Sindsdien heeft UTF-8\footnote{Een tekst coderingsset die maximaal 8 bytes per karakter gebruikt. Vaak vernoemt als Unicode (Universal coded character set)} de leiding overgenomen. Momenteel is 88.5\% van alle webpaginas in UTF-8\cite{UnicodeStatistics}. Deze grote sprong in populariteit is te wijten aan de grote variateit van karakters die UTF-8 kan coderen, bijna alle mogelijke karakters. Dit is iets wat ASCII niet kan. Deze limitatie van ASCII valt te wijten aan de structuur van de coderingsset. ASCII gebruikt maar 1 byte, UTF-8 kan maximaal 4 bytes gebruiken.
+Alle computersystemen opereren via bits. Dit wil zeggen dat we bepaalde afspraken moeten maken wanneer we verschillende types data willen voorstellen zoals bv tekst of getallen. Deze afspraken rond tekst noemen we de codering van de tekst. Het is belangrijk dat beide partijen van de communicatie weten op welke manier ze de reeks bits van de andere partij moeten interpreteren.
+\pbr
+ASCII\footnote{American Standard Code for Information Interchange} was vroeger een veelgebruikte coderingsset. Deze coderingsset was ontworpen in amerika door ASA\footnote{American Standards Association} in 1963. We vinden deze vandaag nog steeds vaak terug in apparaten zoals kleine LCD schermen en online op websites. Waar het tot en met 2007 de meest populaire coderingsset was. Sindsdien heeft UTF-8\footnote{Een tekst coderingsset die maximaal 8 bytes per karakter gebruikt. Vaak vernoemt als Unicode (Universal coded character set)} de leiding overgenomen. Momenteel is 88.5\% van alle webpaginas in UTF-8\cite{w3techs2017}. Deze grote sprong in populariteit is te wijten aan de grote variateit van karakters die UTF-8 kan coderen, bijna alle mogelijke karakters. Dit is iets wat ASCII niet kan. Deze limitatie van ASCII valt te wijten aan de structuur van de coderingsset. ASCII gebruikt maar 1 byte, UTF-8 kan maximaal 4 bytes gebruiken.
 \subsection{Protocol}
 Voor seriële communicatie tussen de Arduino en externe apparaten vlot te laten verlopen zullen we een protocol\footnote{Set regels die defineren hoe er zal gecommuniceerd worden tussen apparaten} moeten ontwerpen.
 Voor we beginnen met het ontwerpen van een protocol kijken we best eerst naar welke noden we hebben en welke functionaliteit we tot onze beschikking hebben om in deze noden te voorzien. Daarna kunnen we kijken of anderen al geen oplossing hebben gemaakt. Arduino is namelijk open-source (hardware en software\footnote{open-source software is software waarvan de broncode publiek ter beschikking is gesteld}) dus er bestaat een goede kans dat we een oplossing kunnen vinden zonder er zelf 1 te hoeven ontwerpen. De functionaliteit die we tot onze beschikking hebben staat hierboven al beschreven wat ons nog rest dan is onze noden voor het protocol in kaart brengen.
-\\\\
+\pbr
 Ons protocol moet voornamelijk data kunnen uitwisselen maar ook enkele instructies ondersteunen, deze kunnen we onderverdelen in de volgende aspecten.
-\\\\
+\pbr
 pH sensor:
 \begin{itemize}
     \item lezing op(aan)vragen
@@ -181,33 +187,28 @@ Algemene protocol functies
     \item Protocol versie
     \item Tijdsaanduidingen
 \end{itemize}
-Meer specifiek zal ons protocol gemakkelijk moeten communiceren tussen C\#\footnote{C\# (CSharp) is een veelgebruikte object georiënteerde programmeertaal die gebruik kan maken van het .NET Framework} en Arduino over een seriële poort (USB). Hiervoor bestaan er wel een aantal open-source projecten waar deze functionaliteit is geïmplementeerd maar deze bevatten niet altijd exact de gewenste functionaliteit dus maken we er zelf 1.\\\\
+Meer specifiek zal ons protocol gemakkelijk moeten communiceren tussen C\#\footnote{C\# (CSharp) is een veelgebruikte object georiënteerde programmeertaal die gebruik kan maken van het .NET Framework} en Arduino over een seriële poort (USB). Hiervoor bestaan er wel een aantal open-source projecten waar deze functionaliteit is geïmplementeerd maar deze bevatten niet altijd exact de gewenste functionaliteit dus maken we er zelf 1.
+\pbr
 De makkelijks te implementeren optie lijkt me om 2 objecten te maken, een \"Request\" en \"Response\" object. Deze dan te serializeren naar een JSON\footnote{JavaScript Object Notation, een lichtgewichte manier om objecten naar strings te converteren en vice versa} string en deze dan over de seriële poort te sturen.
 \subsubsection{Klasse diagrammen}
 TODO
 \subsubsection{Implementatie}
 TODO
 \paragraph{JSON (de)serialisatie}
-Voor de C\# zijde van de communicatie kunnen het JSON.NET nuget package\footnote{www.newtonsoft.com/json} gebruiken. Dit is de standaardoptie voor serializatie te hanteren in C\#. We kunnen dit installeren in ons project via de nuget package manager. \code{Install-Package Newtonsoft.Json -Version 9.0.1}. Deze library is vrij makkelijk in gebruik\\
-\begin{minted}
-[
-linenos
-]
-{csharp}
+Voor de C\# zijde van de communicatie kunnen het JSON.NET nuget package\footnote{www.newtonsoft.com/json} gebruiken. Dit is de standaardoptie voor serializatie te hanteren in C\#. We kunnen dit installeren in ons project via de nuget package manager. \code{Install-Package Newtonsoft.Json -Version 9.0.1}. Deze library is vrij makkelijk in gebruik\lbr
+\begin{lstlisting}[language=java]
 // Deserializatie
 var data = JsonConvert.DeserializeObject<Type>(string);
 // Serializatie
 string str = JsonConvert.SerializeObject(object);
-\end{minted}
-Voor de Arduino zijde van de communicatie kunnen we de ArduinoJson\footnote{github.com/bblanchon/ArduinoJson} library van bblanchon gebruiken. Deze is ook vrij makkelijk in gebruik.\\
-\begin{minted}
-[
-linenos
-]
-{csharp}
+\end{lstlisting}
+Voor de Arduino zijde van de communicatie kunnen we de ArduinoJson\footnote{github.com/bblanchon/ArduinoJson} library van bblanchon gebruiken. Deze is ook vrij makkelijk in gebruik.\lbr
+\begin{lstlisting}[language=java]
 #include <ArduinoJson.h>
 
-// Deserializatie
+/*
+ * Deserializatie
+*/
 // memory buffer voor json data
 DynamicJsonBuffer  jsonBuffer
 // deserializatie
@@ -219,16 +220,17 @@ if (!root.success())
     return;
 }
 
-
-// Serializatie
+/*
+ * Serializatie
+*/
 // memory buffer voor json data
 DynamicJsonBuffer  jsonBuffer
 JsonObject& root = jsonBuffer.createObject();
 // data toevoegen aan het json object
 root["time"] = 1351824120;
-// print data naar seriële poort
+// print data
 root.printTo(Serial);
-\end{minted}
+\end{lstlisting}
 
 \section{Pins}
 \subsection{Verschil digitale analoge pins}
@@ -243,7 +245,7 @@ Pulse width modulation is de term die gebruikt word om een speciaal type van dig
     \caption{Een voorbeeld van een PWM signaal}
 \end{figure}
 
-\newpage
+%\newpage
 
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
@@ -252,7 +254,8 @@ Pulse width modulation is de term die gebruikt word om een speciaal type van dig
 \end{wrapfigure}
 Een andere eigenschap van dit type signaal is de "Duty cycle". Deze wordt in \% gegeven en defineerd hoeveel \% van de tijd het signaal in de HIGH staat is.
 
-We kunnen deze techniek gebruiken om analoge resultaten te krijgen met digitale middelen. Zo kunnen we een PWM signaal gebruik om de helderheid van een LEDje te veranderen ipv het normale aan uit gedrag van digitale pins.\\\\
+We kunnen deze techniek gebruiken om analoge resultaten te krijgen met digitale middelen. Zo kunnen we een PWM signaal gebruik om de helderheid van een LEDje te veranderen ipv het normale aan uit gedrag van digitale pins.
+\pbr
 Met de Arduino kunnen we de \code{analogWrite(pin, x)} functie gebruiken. De \code{analogWrite} functie kan $2^8$ verschillende waarden aannemen, dit wil dus zeggen dat x tussen de 0-255 kan zijn waar 0 correspondeerd met een 0\% duty cycle en 255 met een 100\% duty cycle.
 
 \subsection{Analoge pins}
@@ -373,11 +376,11 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
         \begin{split}
             c_{NaOH} &= \frac{c_2V_2}{V_1}\\
             c_{NaOH,a} &= \frac{0.1\ mol/L\ 0.020\ L}{0.0221\ L}\\
-                    &= \bold{0.091\ mol/L}\\\\
+                    &= \mathbf{0.091\ mol/L}\\\\
             c_{NaOH,b} &= \frac{0.1\ mol/L\ 0.020\ L}{0.0219\ L}\\
-                    &= \bold{0.091\ mol/L}\\\\
+                    &= \mathbf{0.091\ mol/L}\\\\
             c_{NaOH,c} &= \frac{0.1\ mol/L\ 0.020\ L}{0.0222\ L}\\
-                    &= \bold{0.090\ mol/L}\\
+                    &= \mathbf{0.090\ mol/L}\\
         \end{split}
     \end{equation*}
 \break
@@ -386,11 +389,11 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
         \begin{split}
             n &= cV\\
             n_{HSO_4^-,a} &= 0.1\ mol/L\ 0.0115\ L\\
-                &= \bold{0.00115\ mol}\\\\
+                &= \mathbf{0.00115\ mol}\\\\
             n_{HSO_4^-,b} &= 0.1\ mol/L\ 0.0118\ L\\
-                &= \bold{0.00118\ mol}\\\\
+                &= \mathbf{0.00118\ mol}\\\\
             n_{HSO_4^-,c} &= 0.1\ mol/L\ 0.0116\ L\\
-                &= \bold{0.00116\ mol}\\\\
+                &= \mathbf{0.00116\ mol}\\\\
         \end{split}
     \end{equation*}
 \end{multicols}
@@ -399,18 +402,18 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
     \begin{split}
         n_{SO_4^{2-}} &= \frac{1}{2}(-K + \sqrt{K}\sqrt{K + 4n}), & \iff K < 1 \wedge n \geq 0 \\
         n_{SO_4^{2-},a} &= \frac{1}{2}(-1.2*10^{-2} + \sqrt{1.2*10^{-2}}\sqrt{1.2*10^{-2} + 4*0.00105})\\
-            &= \bold{0.00106\ mol}\\
+            &= \mathbf{0.00106\ mol}\\
         n_{SO_4^{2-},b} &= \frac{1}{2}(-1.2*10^{-2} + \sqrt{1.2*10^{-2}}\sqrt{1.2*10^{-2} + 4*0.00108})\\
-            &= \bold{0.00108\ mol}\\
+            &= \mathbf{0.00108\ mol}\\
         n_{SO_4^{2-},c} &= \frac{1}{2}(-1.2*10^{-2} + \sqrt{1.2*10^{-2}}\sqrt{1.2*10^{-2} + 4*0.00106})\\
-            &= \bold{0.00107\ mol}\\
+            &= \mathbf{0.00107\ mol}\\
         c_{NaOH} &= \frac{n}{V_{NaOH}}\\
         c_{NaOH,a}  &= \frac{0.00115\ mol + 0.00106\ mol}{0.020\ L}\\
-            &= \bold{0.111\ mol/L}\\
+            &= \mathbf{0.111\ mol/L}\\
         c_{NaOH,b}  &= \frac{0.00118\ mol + 0.00108\ mol}{0.020\ L}\\
-            &= \bold{0.113\ mol/L}\\
+            &= \mathbf{0.113\ mol/L}\\
         c_{NaOH,c} &= \frac{0.00116\ mol + 0.00107\ mol}{0.020\ L}\\
-            &= \bold{0.111\ mol/L}\\
+            &= \mathbf{0.111\ mol/L}\\
     \end{split}
 \end{equation*}
 
@@ -421,17 +424,17 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
     \begin{equation*}
         \begin{split}
             PA_a &= abs(\frac{0.091\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{9\%} \\
+                &= \mathbf{9\%} \\
             PA_b &= abs(\frac{0.091\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{9\%} \\
+                &= \mathbf{9\%} \\
             PA_c &= abs(\frac{0.090\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{10\%} \\
+                &= \mathbf{10\%} \\
             PMM_a &= \frac{0.0001\ L}{0.0221\ L}*100\%\\
-                &= \bold{4.5\%}\\
+                &= \mathbf{4.5\%}\\
             PMM_b &= \frac{0.0001\ L}{0.0219\ L}*100\%\\
-                &= \bold{4.6\%}\\
+                &= \mathbf{4.6\%}\\
             PMM_c &= \frac{0.001\ L}{0.0222\ L}*100\%\\
-                &= \bold{4.5\%}\\
+                &= \mathbf{4.5\%}\\
         \end{split}
     \end{equation*}
 \break
@@ -439,17 +442,17 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
     \begin{equation*}
         \begin{split}
             PA_a &= abs(\frac{0.111\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{11\%} \\
+                &= \mathbf{11\%} \\
             PA_b &= abs(\frac{0.113\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{13\%} \\
+                &= \mathbf{13\%} \\
             PA_c &= abs(\frac{0.111\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{11\%} \\
+                &= \mathbf{11\%} \\
             PMM_a &= \frac{0.0001\ L}{0.0115\ L}*100\%\\
-                &= \bold{8.7\%}\\
+                &= \mathbf{8.7\%}\\
             PMM_b &= \frac{0.0001\ L}{0.0118\ L}*100\%\\
-                &= \bold{8.5\%}\\
+                &= \mathbf{8.5\%}\\
             PMM_c &= \frac{0.001\ L}{0.0116\ L}*100\%\\
-                &= \bold{8.6\%}\\
+                &= \mathbf{8.6\%}\\
         \end{split}
     \end{equation*}
 \end{multicols}
@@ -490,7 +493,7 @@ Eerst passen we de "Interpolation" functie toe om een best passende curve voor o
     \caption{"Interpolation" functie toegepast op dataset c}
 \end{figure}
 \newpage
-Daarna kunnen we de afgeleiden nemen van deze functies met de "Derivative" functie.\\
+Daarna kunnen we de afgeleiden nemen van deze functies met de "Derivative" functie.\lbr
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{a_derivative.jpg}
@@ -506,7 +509,7 @@ Daarna kunnen we de afgeleiden nemen van deze functies met de "Derivative" funct
     \includegraphics[width=0.7\textwidth]{c_derivative.jpg}
     \caption{"Derivative" functie toegepast op c-titratiecurve}
 \end{figure}
-Hiervan nemen we dan de x-waarde van het minima en dat is ons volume.\\\\
+Hiervan nemen we dan de x-waarde van het minima en dat is ons volume.\pbr
 \begin{tabular}{|c|c|c|}
     \hline
     $V_{a}$ (L) & $V_{b}$ (L) & $V_{c}$ (L) \\\hline
@@ -517,11 +520,11 @@ Hiervan nemen we dan de x-waarde van het minima en dat is ons volume.\\\\
     \begin{split}
         c_{NaOH} &= \frac{0.1\ mol/L * 0.020\ L}{V}\\
         c_{NaOH,a} &= \frac{0.1\ mol/L * 0.020\ L}{0.0204\ L}\\
-            &= \bold{0.098\ mol\ L}\\\\
+            &= \mathbf{0.098\ mol\ L}\\\\
         c_{NaOH,b} &= \frac{0.1\ mol/L * 0.020\ L}{0.0205\ L}\\
-            &= \bold{0.098\ mol\ L}\\\\
+            &= \mathbf{0.098\ mol\ L}\\\\
         c_{NaOH,c} &= \frac{0.1\ mol/L * 0.020\ L}{0.0194\ L}\\
-            &= \bold{0.103\ mol\ L}\\
+            &= \mathbf{0.103\ mol\ L}\\
     \end{split}
 \end{equation*}
 
@@ -529,22 +532,22 @@ Hiervan nemen we dan de x-waarde van het minima en dat is ons volume.\\\\
     \begin{equation*}
         \begin{split}
             PA_a &= abs(\frac{0.098\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{2\%} \\
+                &= \mathbf{2\%} \\
             PA_b &= abs(\frac{0.098\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{2\%} \\
+                &= \mathbf{2\%} \\
             PA_c &= abs(\frac{0.103\ mol/L}{0.1\ mol/L}*100-100)\\
-                &= \bold{3\%} \\
+                &= \mathbf{3\%} \\
         \end{split}
     \end{equation*}
 \break
     \begin{equation*}
         \begin{split}
             PMM_a &= \frac{0.0001\ L}{0.0204\ L}*100\%\\
-                &= \bold{4.9\%}\\
+                &= \mathbf{4.9\%}\\
             PMM_b &= \frac{0.0001\ L}{0.0205\ L}*100\%\\
-                &= \bold{4.9\%}\\
+                &= \mathbf{4.9\%}\\
             PMM_c &= \frac{0.001\ L}{0.0194\ L}*100\%\\
-                &= \bold{5.2\%}\\
+                &= \mathbf{5.2\%}\\
         \end{split}
     \end{equation*}
 \end{multicols}
@@ -574,7 +577,7 @@ Moet nog uitgevoerd worden.
 \printbibliography
 
 \begin{appendices}
-\chapter{Arduino technische specificaties}
+\chapter*{Arduino technische specificaties}
 \begin{tabular}{|l|l|}
   \hline
   Microcontroller & ATmega328P\\\hline
@@ -601,7 +604,7 @@ Moet nog uitgevoerd worden.
           \includegraphics[width=\textwidth]{ArduinoStroomschema.png}
   \end{sidewaysfigure}
 
-\chapter{Labo gegevens}
+\chapter*{Labo gegevens}
 \begin{longtable}{|c|c||c|c||c|c|}
     \hline
     $V_{HCl,a}$ (L) & $pH_{HCl,a}$ & $V_{HCl,b}$ (L) & $pH_{HCl,b}$ & $V_{HCl,c}$ (L) & $pH_{HCl,c}$ \\\hline
