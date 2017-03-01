@@ -1,9 +1,9 @@
-\documentclass[10pt,twoside]{report}
+\documentclass[11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[dutch]{babel}
 \usepackage{multicol}
 \usepackage{float}
-\usepackage[a4paper, margin=0.98in]{geometry}
+\usepackage[a4paper, left=3.3cm, top=2cm, right=2cm, bottom=2cm]{geometry}
 \usepackage[fleqn]{amsmath}
 \usepackage{amsfonts}
 \usepackage{titling}
@@ -24,13 +24,10 @@
 \usepackage{rotating, graphicx}
 \usepackage{wrapfig}
 \usepackage{csquotes}
+\usepackage{gensymb}
+\usepackage{nccmath}
 \usepackage[style=numeric-comp,citestyle=numeric-comp]{biblatex}
 \pgfplotsset{compat=newest}
-
-% Latex Custom Build Commands
-% !TEX outputDirectory = build
-% !TEX outputFormat = pdf
-% !TEX enableShellEscape = true
 
 % footnote footers
 \DeclareNewFootnote{A}
@@ -70,7 +67,7 @@
 % Title page
 \author{Laurens Ketsman}
 \title{Automatisering van zuur-base titraties}
-\date{17 januari 2017}
+\date{\today}
 
 % Section numbering
 \setcounter{secnumdepth}{5}
@@ -122,18 +119,30 @@
 \newpage
 \chapter*{Voorwoord}
 \thispagestyle{empty}
+Als student van het 2de jaar in de 3de graad van Techniek-Wetenschappen kregen we de opdracht om een geïntegreerde proef te maken. We mochten zelf ons eigen onderwerp kiezen, ik heb gekozen om zuur-base titraties te gaan onderzoeken en de automatisering ervan.
+\pbr
+Zuur-base titratie is een veelgebruikte methode om de concentratie van een zuur of base te bepalen in een oplossing. Dit werk bestaat erin of we dit process kunnen automatiseren voor een lage kost en bepalen of dit dan wel nog precies genoeg is voor mogelijke doeleinden.
+\pbr
+Ik heb voor dit gekozen omdat zuur-base titraties vaak voorkomen, niet alleen in labos maar ook in de prive sector. Er bestaan reeds machines die dit process automatiseren maar deze zijn heel erg duur. Ik hoop met dit werk een middengrond te gaan verkennen tussen de heel dure profesionele machines en het handmatige werk. Dit zal ik doen door zelf een eigen machine te vervaardigen aan een lage kost en deze te gaan vergelijken.
+\pbr
+Graag zou ik mevr. Van Meenen danken voor de vele informatie die zij tot mijn beschikking stelde en voor het aanleren van de gebruikte technieken bij zuur-base titraties. Verder zou ik ook nog mevr. Danckaert willen bedanken voor mij naar dit idee toe te sturen, me de nodige motivatie te geven om dit werk tot een goed einde te brengen en voor altijd klaar te staan om op men vragen of bedenkingen te antwoorden en inzichten te geven.
+\pbr
+Verder zou ik ook nog mevr. Schaubroeck willen bedanken voor de hulp bij het schrijven en verbeteren van dit werk.
+\pbr
+Tijdens dit groot project was mijn vriendin, Ellen een grote steun en toeverlaat. Zonder haar zou ik nooit de nodige motivatie kunnen gehad hebben om dit werk te maken tot wat het is. Ook wil ik mijn zus, Elina bedanken voor het nalezen en helpen bij het verwoorden en schrijven van mijn GIP.
+\pbr
+Ik heb dit werk vervaardigd in Atom, een open-source tekstverwerkingsprogramma tesamen met Latex, waarvoor ik de TexLive distributie heb gebruikt.
+
 \newpage
 
 % Header
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[RO]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
-\fancyhead[LE]{\thepage\ \rule[-0.25em]{0.14em}{1.3em}\ \rightmark}
+\fancyhead[R]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
 % apply fancyhdr to chapter pages
 \fancypagestyle{plain}{%
   \fancyhf{}%
-    \fancyhead[RO]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
-    \fancyhead[LE]{\thepage\ \rule[-0.25em]{0.14em}{1.3em}\ \rightmark}
+    \fancyhead[R]{\leftmark\ \rule[-0.25em]{0.14em}{1.3em}\ \thepage}
 }
 
 % Titraties achtergrond
@@ -161,11 +170,13 @@ Arduinos worden vaak gebruikt door individuen voor hun projecten waar automatisa
 \section{Seriële communicatie}
 Seriële communicatie met de Arduino is mogelijk via de USB connectie. Dit maakt het mogelijk om via de Arduino gegevens te sturen naar externe apparaten of via externe apparaten gegevens te sturen naar de Arduino.
 \pbr
-De seriële communicatie is een tekst gebaseerd protocol. Dit wil zeggen dat alle communicatie gebeurt via strings\footnote{Een "string" is de benaming die word gegeven aan een reeks karakters in een bepaalde codering in programmeren.}.\lbr
+De seriële communicatie is een tekst gebaseerd protocol. Dit wil zeggen dat alle communicatie gebeurt via strings\footnote{Een ''string'' is de benaming die word gegeven aan een reeks karakters in een bepaalde codering in programmeren.}.\lbr
 \subsection{String codering}
-Alle computersystemen opereren via bits. Dit wil zeggen dat we bepaalde afspraken moeten maken wanneer we verschillende types data willen voorstellen zoals bv tekst of getallen. Deze afspraken rond tekst noemen we de codering van de tekst. Het is belangrijk dat beide partijen van de communicatie weten op welke manier ze de reeks bits van de andere partij moeten interpreteren.
+Alle computersystemen opereren via bits. Dit wil zeggen dat we bepaalde afspraken moeten maken wanneer we verschillende types data willen voorstellen zoals bv tekst of getallen. Deze afspraken rond tekst noemen we de codering van de tekst. Het is belangrijk dat beide partijen van de communicatie weten op welke manier ze de reeks bits van de andere partij moeten interpreteren. De encodering of \"character set\" kan men inbeelden als een lijst waar men elk karakter een nummer gaat toekennen, we moetten dus ervoor zorgen dat beide partijen de karakters op dezelfde manier interpreteren, een computer kan tenslotte alleen maar getallen begrijpen geen letters.
 \pbr
-ASCII\footnote{American Standard Code for Information Interchange} was vroeger een veelgebruikte coderingsset. Deze coderingsset was ontworpen in amerika door ASA\footnote{American Standards Association} in 1963. We vinden deze vandaag nog steeds vaak terug in apparaten zoals kleine LCD schermen en online op websites. Waar het tot en met 2007 de meest populaire coderingsset was. Sindsdien heeft UTF-8\footnote{Een tekst coderingsset die maximaal 8 bytes per karakter gebruikt. Vaak vernoemt als Unicode (Universal coded character set)} de leiding overgenomen. Momenteel is 88.5\% van alle webpaginas in UTF-8\cite{w3techs2017}. Deze grote sprong in populariteit is te wijten aan de grote variateit van karakters die UTF-8 kan coderen, bijna alle mogelijke karakters. Dit is iets wat ASCII niet kan. Deze limitatie van ASCII valt te wijten aan de structuur van de coderingsset. ASCII gebruikt maar 1 byte, UTF-8 kan maximaal 4 bytes gebruiken.
+ASCII\footnote{American Standard Code for Information Interchange} was vroeger een veelgebruikte coderingsset. Deze coderingsset was ontworpen in amerika door ASA\footnote{American Standards Association} in 1963. We vinden deze vandaag nog steeds vaak terug in apparaten zoals kleine LCD schermen en online op websites. Waar het tot en met 2007 het de meest populaire coderingsset was. Sindsdien heeft UTF-8\footnote{Een tekst coderingsset die maximaal 8 bytes per karakter gebruikt. Vaak vernoemt als Unicode (Universal coded character set)} de leiding overgenomen. Momenteel is 88.5\% van alle webpaginas in UTF-8\cite{w3techs2017}. Deze grote sprong in populariteit is te wijten aan de grote variateit van karakters die UTF-8 kan representeren, bijna alle mogelijke karakters. Dit is iets wat ASCII niet kan. Deze limitatie van ASCII valt te wijten aan de structuur van de coderingsset. ASCII gebruikt maar 1 byte, UTF-8 kan maximaal 5 bytes gebruiken.
+\pbr
+UTF-8 is compatibel met ASCII, % TODO: finish
 \subsection{Protocol}
 Voor seriële communicatie tussen de Arduino en externe apparaten vlot te laten verlopen zullen we een protocol\footnote{Set regels die defineren hoe er zal gecommuniceerd worden tussen apparaten} moeten ontwerpen.
 Voor we beginnen met het ontwerpen van een protocol kijken we best eerst naar welke noden we hebben en welke functionaliteit we tot onze beschikking hebben om in deze noden te voorzien. Daarna kunnen we kijken of anderen al geen oplossing hebben gemaakt. Arduino is namelijk open-source (hardware en software\footnote{open-source software is software waarvan de broncode publiek ter beschikking is gesteld}) dus er bestaat een goede kans dat we een oplossing kunnen vinden zonder er zelf 1 te hoeven ontwerpen. De functionaliteit die we tot onze beschikking hebben staat hierboven al beschreven wat ons nog rest dan is onze noden voor het protocol in kaart brengen.
@@ -174,63 +185,80 @@ Ons protocol moet voornamelijk data kunnen uitwisselen maar ook enkele instructi
 \pbr
 pH sensor:
 \begin{itemize}
+    \setlength{\itemsep}{0pt}
     \item lezing op(aan)vragen
     \item calibratie
-    \item aan-uit functie
 \end{itemize}
 Stap motor (pomp):
 \begin{itemize}
+    \setlength{\itemsep}{0pt}
     \item Stap (verzet de motor 1 stap vooruit)
 \end{itemize}
 Algemene protocol functies
 \begin{itemize}
+    \setlength{\itemsep}{0pt}
     \item Protocol versie
     \item Tijdsaanduidingen
 \end{itemize}
 Meer specifiek zal ons protocol gemakkelijk moeten communiceren tussen C\#\footnote{C\# (CSharp) is een veelgebruikte object georiënteerde programmeertaal die gebruik kan maken van het .NET Framework} en Arduino over een seriële poort (USB). Hiervoor bestaan er wel een aantal open-source projecten waar deze functionaliteit is geïmplementeerd maar deze bevatten niet altijd exact de gewenste functionaliteit dus maken we er zelf 1.
 \pbr
-De makkelijks te implementeren optie lijkt me om 2 objecten te maken, een \"Request\" en \"Response\" object. Deze dan te serializeren naar een JSON\footnote{JavaScript Object Notation, een lichtgewichte manier om objecten naar strings te converteren en vice versa} string en deze dan over de seriële poort te sturen.
-\subsubsection{Klasse diagrammen}
-TODO
-\subsubsection{Implementatie}
-TODO
+De makkelijks te implementeren optie lijkt me om 2 objecten te maken, een ''Request'' en ''Response'' object. Deze dan te serializeren naar een JSON\footnote{JavaScript Object Notation, een lichtgewichte manier om objecten naar strings te converteren en vice versa} string en deze dan over de seriële poort te sturen.
+\subsubsection{Klasse diagrammen en implementatie}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{protocol_diagrams.png}
+  \caption{protocol klasse diagram}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{csharp_packet.png}
+  \caption{C\# Packet klasse}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{csharp_request.png}
+  \caption{C\# Request klasse}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{csharp_response.png}
+  \caption{C\# Response klasse}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{csharp_commandEnum.png}
+  \caption{C\# Command enum}
+\end{figure}
+
 \paragraph{JSON (de)serialisatie}
 Voor de C\# zijde van de communicatie kunnen het JSON.NET nuget package\footnote{www.newtonsoft.com/json} gebruiken. Dit is de standaardoptie voor serializatie te hanteren in C\#. We kunnen dit installeren in ons project via de nuget package manager. \code{Install-Package Newtonsoft.Json -Version 9.0.1}. Deze library is vrij makkelijk in gebruik\lbr
-\begin{lstlisting}[language=java]
-// Deserializatie
-var data = JsonConvert.DeserializeObject<Type>(string);
-// Serializatie
-string str = JsonConvert.SerializeObject(object);
-\end{lstlisting}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{csharp_json.png}
+  \caption{C\# JSON (de)serializatie voorbeeld}
+\end{figure}
+
+\newpage
 Voor de Arduino zijde van de communicatie kunnen we de ArduinoJson\footnote{github.com/bblanchon/ArduinoJson} library van bblanchon gebruiken. Deze is ook vrij makkelijk in gebruik.\lbr
-\begin{lstlisting}[language=java]
-#include <ArduinoJson.h>
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{arduino_json.png}
+  \caption{Arduino (de)serializatie voorbeeld}
+\end{figure}
 
-/*
- * Deserializatie
-*/
-// memory buffer voor json data
-DynamicJsonBuffer  jsonBuffer
-// deserializatie
-JsonObject& root = jsonBuffer.parseObject(jsonString);
-// test of de deserializatie successvol was
-if (!root.success())
-{
-    Serial.println("parseObject() failed");
-    return;
-}
+\paragraph{Seriële communicatie}\lbr
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{csharp_serial.png}
+  \caption{C\# seriële communicatie voorbeeld}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{arduino_serial.png}
+  \caption{Arduino seriële communicatie voorbeeld}
+\end{figure}
 
-/*
- * Serializatie
-*/
-// memory buffer voor json data
-DynamicJsonBuffer  jsonBuffer
-JsonObject& root = jsonBuffer.createObject();
-// data toevoegen aan het json object
-root["time"] = 1351824120;
-// print data
-root.printTo(Serial);
-\end{lstlisting}
+
 
 \section{Pins}
 \subsection{Verschil digitale analoge pins}
@@ -245,14 +273,14 @@ Pulse width modulation is de term die gebruikt word om een speciaal type van dig
     \caption{Een voorbeeld van een PWM signaal}
 \end{figure}
 
-%\newpage
+\newpage
 
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
     \includegraphics[width=0.48\textwidth]{pwm_duty.jpeg}
     \caption{25\%, 50\%, 75\% PWM signaal voorbeelden}
 \end{wrapfigure}
-Een andere eigenschap van dit type signaal is de "Duty cycle". Deze wordt in \% gegeven en defineerd hoeveel \% van de tijd het signaal in de HIGH staat is.
+Een andere eigenschap van dit type signaal is de ''Duty cycle''. Deze wordt in \% gegeven en defineerd hoeveel \% van de tijd het signaal in de HIGH staat is.
 
 We kunnen deze techniek gebruiken om analoge resultaten te krijgen met digitale middelen. Zo kunnen we een PWM signaal gebruik om de helderheid van een LEDje te veranderen ipv het normale aan uit gedrag van digitale pins.
 \pbr
@@ -458,12 +486,22 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
 \end{multicols}
 
 \subsubsection{Resultaten}
-\begin{tabular}{|l|c|c|c||c|c|c|}
-    \hline
-      & HCl$_a$ & HCl$_b$ & HCl$_c$ & H$_2$SO$_{4_a}$ & H$_2$SO$_{4_b}$ & H$_2$SO$_{4_c}$ \\\hline
-    c (mol/L) & $0.091\pm4.5\%$ & $0.091\pm4.6\%$ & $0.090\pm4.5\%$ & $0.111\pm8.7\%$ & $0.113\pm8.5\%$ & $0.111\pm8.6\%$ \\\hline
-    PA        & 9\% & 9\% & 10\% & 11\% & 13\% & 11\% \\\hline
-\end{tabular}
+\begin{center}
+  \begin{tabular}{|l|c|c|c|}
+      \hline
+        & HCl$_a$ & HCl$_b$ & HCl$_c$ \\\hline
+      c (mol/L) & $0.091\pm4.5\%$ & $0.091\pm4.6\%$ & $0.090\pm4.5\%$ \\\hline
+      PA        & 9\% & 9\% & 10\% \\\hline
+  \end{tabular}
+\end{center}
+\begin{center}
+  \begin{tabular}{|l|c|c|c|}
+      \hline
+        & H$_2$SO$_{4_a}$ & H$_2$SO$_{4_b}$ & H$_2$SO$_{4_c}$ \\\hline
+      c (mol/L) & $0.111\pm8.7\%$ & $0.113\pm8.5\%$ & $0.111\pm8.6\%$ \\\hline
+      PA        & 11\% & 13\% & 11\% \\\hline
+  \end{tabular}
+\end{center}
 
 \newpage
 
@@ -476,38 +514,38 @@ Als $K > 1$ dan dissocieert de stof volledig. Gebruikmakende van bovenstaande fo
     \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\\hline
 \end{tabular}\\\\
 Het equivalentiepunt is waar de titratiecurve een afgeleide heeft van $\pm\infinity$. Hier kunnen we gebruikmaken van Mathematica om onze data als volgt te analyseren.\\\\
-Eerst passen we de "Interpolation" functie toe om een best passende curve voor onze gegevensset te vinden.
+Eerst passen we de ''Interpolation'' functie toe om een best passende curve voor onze gegevensset te vinden.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{a_interpolation.jpg}
-    \caption{"Interpolation" functie toegepast op dataset a}
+    \caption{''Interpolation'' functie toegepast op dataset a}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{b_interpolation.jpg}
-    \caption{"Interpolation" functie toegepast op dataset b}
+    \caption{''Interpolation'' functie toegepast op dataset b}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{c_interpolation.jpg}
-    \caption{"Interpolation" functie toegepast op dataset c}
+    \caption{''Interpolation'' functie toegepast op dataset c}
 \end{figure}
 \newpage
-Daarna kunnen we de afgeleiden nemen van deze functies met de "Derivative" functie.\lbr
+Daarna kunnen we de afgeleiden nemen van deze functies met de ''Derivative'' functie.\lbr
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{a_derivative.jpg}
-    \caption{"Derivative" functie toegepast op a-titratiecurve}
+    \caption{''Derivative'' functie toegepast op a-titratiecurve}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{b_derivative.jpg}
-    \caption{"Derivative" functie toegepast op b-titratiecurve}
+    \caption{''Derivative'' functie toegepast op b-titratiecurve}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{c_derivative.jpg}
-    \caption{"Derivative" functie toegepast op c-titratiecurve}
+    \caption{''Derivative'' functie toegepast op c-titratiecurve}
 \end{figure}
 Hiervan nemen we dan de x-waarde van het minima en dat is ons volume.\pbr
 \begin{tabular}{|c|c|c|}
@@ -573,6 +611,225 @@ Moet nog uitgevoerd worden.
     \item Het effectieve labo was makkelijk uit te voeren maar heb titratie van H\textsubscript{2}SO\textsubscript{4} met NaOH niet kunnen uitvoeren mits tijdsgebrek. Ik had het gedeelte met H\textsubscript{2}SO\textsubscript{4} vooraf niet gepland maar tijdens het labo zag ik dat ik nog tijd over had en probeerde die tijd dan ook te gebruiken maar heb het alleen maar manueel kunnen uitvoeren.
 \end{itemize}
 
+% regressie
+\chapter{Regressie analyze}
+\textbf{Definitie}\\
+Regressie analyze is het process om verbanden tussen verschillende variablen te schatten. Een best passende curve vinden en de sterkte van het geschatte verband analyzeren, hoe goed stelt ons model de data voor.
+% square bcs larger errors would have a bigger error
+\pbr
+Gebruikmakende van een voorbeeld zullen we de regressie analyze nader bespreken. We kunnen bv het verband trachten te schatten tussen de inkomsten van een cafe en de temperatuur op die dag.\\
+% mathematica string data = {{23, 3213}, {21, 2089}, {25, 2253}, {18, 1801}, {13, 801}, {16, 1934}, {13, 1720}, {17, 1514}, {12, 1017}}
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Dag & Inkomsten (\$) & Temperatuur (\degree C) \\\hline
+    3-jun & 3213 & 23 \\\hline
+    10-jun & 2089 & 21 \\\hline
+    17-jun & 2253 & 25 \\\hline
+    24-jun & 1801 & 18 \\\hline
+    1-jul & 801 & 13 \\\hline
+    8-jul & 1934 & 16 \\\hline
+    15-jul & 1720 & 13 \\\hline
+    22-jul & 1514 & 17 \\\hline
+    29-jul & 1017 & 12 \\\hline
+  \end{tabular}
+\end{center}
+Als we dit grafisch gaan voorstellen kunnen we een inzicht in onze data krijgen, wat we verwachten is dat de inkomsten stijgen als de temperatuur stijgt.\\
+% ListPlot[data, PlotTheme->"Scientific",FrameLabel->{{HoldForm[HoldForm[Inkomsten]],None},{HoldForm[Temperatuur],None}},PlotLabel->None, ImageSize->Full]
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.55\textwidth]{RegressieCafeScatterplot.jpg}
+  \caption{Spreidingsdiagram van cafe inkomsten}
+\end{figure}
+
+\newpage
+
+% ListPlot[data, PlotTheme->"Scientific", GridLines->{{158/9}, {16342/9}}, GridLinesStyle->{{Gray, Dashed}, {Gray, Dashed}},FrameLabel->{{HoldForm[HoldForm[Inkomsten]],None},{HoldForm[Temperatuur],None}},PlotLabel->None, ImageSize->Full]
+\begin{wrapfigure}{l}{0.6\textwidth}
+  \centering
+  \includegraphics[width=0.55\textwidth]{RegressieCafeScatterplotAverage.jpg}
+  \caption{$\overbar{y}$ en $\overbar{x}$ grafisch voorgesteld}
+\end{wrapfigure}
+We zouden bv het gemiddelde kunnen nemen. Het gemiddelde van onze inkomsten (y) is dan gelijk aan $\langle y \rangle = \frac{1}{n} \sum_{i=1}^ny_i}$
+\lbr
+In dit geval zou dat bij benadering 1815.78 zijn. Dit kunnen we ook grafisch gaan voorstellen met de simpele formule $y = \langle y \rangle$ we zullen deze lijn $\overbar{y}$ noemen. Dus $\overbar{y} = \langle y \rangle$. Soortgelijk gaan we het gemiddelde van de $x$ waarden $\overbar{x}$ noemen. Grafisch geeft ons dit.
+\pbr\lbr
+We hadden een evenredig verband verwacht dus het gemiddelde, $\overbar{y}$ stelt onze data eigenlijk niet zo heel goed voor. Maar $\overbar{y}$ en $\overbar{x}$ zal later nog wel van pas komen als we ons model verder gaan analyzeren voor nu kunnen we verder toewerken naar ons model.
+\pbr
+In ons voorbeeld willen we de inkomsten kunnen voorspellen gebaseerd op een gegeven temperatuur. De inkomsten is dus de afhankelijke variable, deze zullen we $y$ noemen en de temperatuur is onze onafhankelijke variable deze zullen we $x$ noemen. Gezien we maar 1 onafhankelijke variable hebben kunnen we volgende formule opstellen voor het ideale model van onze data, dit is.
+\begin{ceqn}
+  \begin{align}
+    y = \beta_0 + \beta_1x + \epsilon
+    \label{perfectModel}
+  \end{align}
+\end{ceqn}
+We maken gebruik van griekse letters wanneer we theoretisch werken in de statistiek. Hier stelt $\beta_0$ het snijpunt met de y-as voor, $\beta_1$ stelt de helling van onze curve voor en $\epsilon$ is de fout van ons model. Deze laatste term moet erbij want hoe goed ons model ook is er is altijd een willekeurige fout waar ons model niet op kon voorzien zijn. $\beta_0$ en $\beta_1$ worden ook wel eens populatie parameters genoemt.
+\pbr
+Formule \ref{perfectModel} kan je inbeelden als het perfecte model. De echte waarden van $\beta_0$ en $\beta_1$ kunne we echter niet bereiken omdat we niet oneindig veel datapunten tot onze beschikking hebben.\lbr
+Wanneer $\beta_1 > 1$ dan spreken we van een positief lineair verband en als $\beta_1 < 1$ spreken we van een negatief lineair verband. Wanneer $\beta_1 = 0$ dan is er geen verband tussen onze onafhankelijk en afhankelijk variablen $x$ en $y$.
+\pbr
+Wat we dus uiteindelijk willen doen is de waarden van onze populatie parameters zo goed mogelijk schatten met de gegeven data die we hebben. Deze zullen we $b_0$ en $b_1$ noemen deze zijn schattingen van de echte waarden van $\beta_0$ en $\beta_1$. De schatting van $y$ zullen we $\hat{y}$ noemen. Dit kunnen we dan terug in onze formule plaatsen wat ons het volgende geeft.
+\begin{ceqn}
+  \begin{align}
+    \begin{split}
+      \hat{y} &= b_0 + b_1x\\
+      \hat{y} &= ax + b\\
+    \end{split}
+    \label{yhatModel}
+  \end{align}
+\end{ceqn}
+Hier geldt terug het zelfde als voordien. Als $b_1 > 0$ hebben we een positief lineair verband, als $b_1 < 0$ een negatief lineair verband en als $b_1 = 0$ is er geen verband tussen onze onafhankelijk en afhankelijk variablen.
+
+\newpage
+
+Nu we alles iets formeler hebben opgesteld kunnen we beginnen met zoeken naar $b_0$ en $b_1$. Ons doel is dat onze geschatte waarden, $\hat{y}$ zo dicht mogelijk bij onze geobserveerde waarden liggen, $y$. Anders gezegt, we willen de afstand tussen $\hat{y}$ en $y$ gaan minimalizeren, deze afstand noemen we de afwijking, storingsterm of residu $e_i$. $e_i = y_i -\hat{y}_i$
+\begin{ceqn}
+  \begin{align}
+    \text{min} \sum_{i=1}^n(y_i - \hat{y}_i)^2 = \text{min} \sum_{i=1}^ne_i^2
+    \label{errorSum}
+  \end{align}
+\end{ceqn}
+We kwadrateren hier omdat we geen negatieve waarden willen. We zouden ook de absolute waarde kunnen nemen maar dit doen we niet omdat we kleine deviaties een heel kleine impact willen laten hebben op de som en grote deviaties een grotere impact. Deze methode noemt men de \"Least squares method\" of kleinste kwadraten methode.
+\pbr
+om de waarde van $b_0$ en $b_1$ te gaan bepalen maken we gebruik van de afwijkingen.\lbr
+$X_i = x_i - \overbar{x}$ en $Y_i = y_i - \overbar{y}$. $\overbar{x}$ en $\overbar{y}$ zijn de gemiddelden en worden gegeven door.\lbr
+\noindent\begin{minipage}{.5\linewidth}
+  \begin{equation*}
+    \overbar{x} = \frac{1}{n}\sum_{i=1}^{n}x_i
+  \end{equation*}
+\end{minipage}%
+\begin{minipage}{.5\linewidth}
+  \begin{equation*}
+    \overbar{y} = \frac{1}{n}\sum_{i=1}^{n}y_i
+  \end{equation*}
+\end{minipage}
+Dit kunnen we nu verder uitwerken.
+\begin{equation*}
+  \begin{split}
+    e_i &= y_i - b_1x_i - b_0\\
+    &= (y_i - \overbar{y}) - b_1(x_i - \overbar{x})-(b_0 - \overbar{y} + b_1\overbar{x})\\
+    &= Y_i - b_1X_i - (b_0 - \overbar{y} + b_1\overbar{x})
+  \end{split}
+\end{equation*}
+Dit kunnen we nu terug in formule \ref{errorSum} plaatsen als volgt.
+\begin{equation*}
+  \begin{split}
+    \sum_{i=1}^{n}e^2 &= \sum_{i=1}^n((Y_i - b_1X_i)-(b_0 - \overbar{y} + b_1\overbar{x}))^2\\
+    &= \sum_{i=1}^n((Y_i - b_1X_i)^2 + (b_0 - \overbar{y} + b_1\overbar{x})^2 - 2(Y_i - b_1X_i)(b_0 - \overbar{y} + b_1\overbar{x}))\\
+    &= \sum_{i=1}^n(Y_i - b_1X_i)^2 + \sum_{i=1}^n(b_0 - \overbar{y} + b_1\overbar{x})^2 - 2\sum_{i=1}^n((Y_i - b_1X_i)(b_0 - \overbar{y} + b_1\overbar{x}))\\
+  \end{split}
+\end{equation*}
+We weten dat de som van het verschil van de deviaties en het gemiddelde gelijk is aan 0 dus.
+\noindent\begin{minipage}{.5\linewidth}
+  \begin{equation*}
+    \sum_{i=1}^n(x_i - \overbar{x}) = \sum_{i=1}^nX_i = 0
+  \end{equation*}
+\end{minipage}%
+\begin{minipage}{.5\linewidth}
+  \begin{equation*}
+    \sum_{i=1}^n(y_i - \overbar{y}) = \sum_{i=1}^nY_i = 0
+  \end{equation*}
+\end{minipage}
+Dit kunnen we dan gebruiken om een term weg te werken want als.
+\begin{equation*}
+  \begin{split}
+    &\sum_{i=1}^n(Y_i - b_1X_i) = \sum_{i=1}^nY_i - b_1\sum_{i=1}^nX_i = 0 - b_10 = 0\\
+    &\implies \sum_{i=1}^n((Y_i - b_1X_i)(b_0 - \overbar{y} + b_1\overbar{x})) = \sum_{i=1}^n0(b_0 - \overbar{y} + b_1\overbar{x}) = 0\\
+    &\implies \sum_{i=1}^ne_i = \sum_{i=1}^n(Y_i-b_1X_i)^2 + \sum_{i=1}^n(b_0 - \overbar{y} + b_1\overbar{x})^2
+  \end{split}
+\end{equation*}
+Deze laatste term bevat geen iteratievariable dus kunnen we deze gewoon als volgt schrijven.
+\begin{equation*}
+  \sum_{i=1}^ne_i = \sum_{i=1}^n(Y_i-b_1X_i)^2 + n(b_0 - \overbar{y} + b_1\overbar{x})^2
+\end{equation*}
+
+\newpage
+
+Als we nu terugblikken naar ons eigenlijke doel was het om de som van alle gekwadrateerde deviaties te minimalizeren. Dit is een som van 2 termen en een som van 2 termen is minimaal als beide termen minimaal zijn dus.
+\begin{equation*}
+  \begin{split}
+    &\sum_{i=1}^n(Y_i - b_1X_i)^2\ \text{is minimaal}\\
+    &\iff \sum_{i=1}^n(Y_i^2 + X_i^2b_1^2 - 2X_iY_ib_1)\\
+    &\iff b_1^2\sum_{i=1}^nX_i^2 + \sum_{i=1}^nY_i^2 - 2b_1\sum_{i=1}^nX_iY_i
+  \end{split}
+\end{equation*}
+Hierin kunnen we een kwadratische functie zien. Een kwadratische functie $f(x) = ax^2 + bx + c$ waarvan we weten dat het minimaal is $\iff a > 0 \wedge x = \frac{-b}{2a}$. Toegepast op onze formule geeft dat $b_1$ gelijk is aan.
+\begin{equation*}
+  \begin{split}
+    b_1 &= \frac{2\sum_{i=1}^nX_iY_i}{2\sum_{i=1}^nX_i^2}\\
+    &= \frac{\sum_{i=1}^n(x_i - \overbar{x})(y_i - \overbar{y})}{\sum_{i=1}^n(x_i - \overbar{x})^2}
+  \end{split}
+\end{equation*}
+Nu hebben we $b_1$ bepaald, $b_0$ bepalen is verder dan een triviale taak.
+\begin{equation*}
+  \begin{split}
+    &n(b_0- \overbar{y} + b_1\overbar{x})^2\ \text{is minimaal}\\
+    &\iff n(b_0 - \overbar{y} + b_1\overbar{x})^2 = 0\ \text{, want een kwadraat heeft als min waarde 0}\\
+    &\iff b_0 - \overbar{y} + b_1\overbar{x} = 0\\
+    &\iff b_0 = \overbar{y} - b_1\overbar{x}
+  \end{split}
+\end{equation*}
+Nudat we $b_0$ en $b_1$ bepaald hebben kunnen we onze formule voor $\hat{y}$\ref{yhatModel} herformuleren.
+\begin{equation}
+  \hat{y} = (\overbar{y} - b_1\overbar{x}) + \frac{\sum_{i=1}^n(x_i - \overbar{x})(y_i - \overbar{y})}{\sum_{i=1}^n(x_i - \overbar{x})^2}x
+  \label{yhatEquation}
+\end{equation}
+Met formule \ref{yhatEquation} tot onze beschikking kunnen we dit gaan toepassen op ons voorbeeld om een regressielijn te gaan bepalen.
+\pbr
+Eerst gaan we $\overbar{x}$ en $\overbar{y}$ bepalen.
+\begin{equation*}
+  \begin{split}
+    \overbar{x} &= \frac{1}{n}\sum_{i=1}^nx_i\\
+      &= \frac{23+21+25+18+13+16+13+17+12}{9}\\
+      &= \frac{158}{9} \approx 17.56\\
+    \overbar{y} &= \frac{1}{n}\sum_{i=1}^ny_i\\
+     &= \frac{3213+2089+2253+1801+801+1934+1720+1514+1017}{9}\\
+     &= \frac{16342}{9} \approx 1815.78\\
+  \end{split}
+\end{equation*}
+
+\newpage
+
+De volgende stap dan is om $b_1$ en $b_0$ te gaan bepalen.\lbr
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    i & $x_i - \overbar{x}$ & $y_i - \overbar{y}$ & $(x_i - \overbar{x})(y_i - \overbar{y})$ & $(x_i - \overbar{x})^2$ \\\hline
+    1 & 49/9 & 12575/9 & 6616175/81 & 2401/81 \\\hline
+    2 & 31/9 & 2459/9 & 76229/81 & 961/81 \\\hline
+    3 & 67/9 & 3935/9 & 263645/81 & 4489/81 \\\hline
+    4 & 4/9 & -133/9 & -532/81 & 16/81 \\\hline
+    5 & -41/9 & -9133/9 & 374453/81 & 1681/81 \\\hline
+    6 & -14/9 & 1064/9 & -14896/81 & 196/81 \\\hline
+    7 & -41/9 & -862/9 & -43625/81 & 1681/81 \\\hline
+    8 & -5/9 & -2716/9 & 13580/81 & 25/81 \\\hline
+    9 & -50/9 & -7189/9 & 359450/81 & 2500/81 \\\hline\hline
+    \multicolumn{3}{|r|}{som} & 182720/9 & 1550/9 \\\hline
+  \end{tabular}
+\end{center}
+\begin{equation*}
+  \begin{split}
+      b_1 &= \frac{\sum_{i=1}^n(x_i - \overbar{x})(y_i - \overbar{y})}{\sum_{i=1}^n(x_i - \overbar{x})^2} = \frac{\frac{182720}{9}}{\frac{1550}{9}} = \frac{182720}{1550} = \frac{18272}{155} \approx 117.884\\
+      b_0 &= \overbar{y} - b_1\overbar{x} = \frac{16342}{9} - \frac{18272}{155}\frac{158}{9} = -\frac{353966}{1395} \approx -253.739
+  \end{split}
+\end{equation*}
+Nudat we alles hebben berekend hebben we onze formule voor $\hat{y}$ namelijk.
+\begin{ceqn}
+  \begin{align}
+    \hat{y} = -\frac{153966}{1395} + \frac{18272}{155}x
+    \label{calculatedExampleyhat}
+  \end{align}
+\end{ceqn}
+
+% Show[ListPlot[data, PlotTheme->"Scientific", GridLines->{{158/9}, {16342/9}}, GridLinesStyle->{{Gray, Dashed}, {Gray, Dashed}},FrameLabel->{{HoldForm[HoldForm[Inkomsten]],None},{HoldForm[Temperatuur],None}},PlotLabel->None, ImageSize->Full], Plot[-153966/1395+18272/155 x, {x, 11,26}]]
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{RegressieCafeScatterplotRegressionLine.jpg}
+  \caption{Grafische voorstelling van onze regressielijn}
+\end{figure}
+
+
+
 % Bibliographie en bijlagen
 \printbibliography
 
@@ -601,7 +858,7 @@ Moet nog uitgevoerd worden.
 
   \newpage
   \begin{sidewaysfigure}
-          \includegraphics[width=\textwidth]{ArduinoStroomschema.png}
+    \includegraphics[width=\textwidth]{ArduinoStroomschema.png}
   \end{sidewaysfigure}
 
 \chapter*{Labo gegevens}
