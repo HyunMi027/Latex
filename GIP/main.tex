@@ -615,7 +615,6 @@ Moet nog uitgevoerd worden.
 \chapter{Regressie analyze}
 \textbf{Definitie}\\
 Regressie analyze is het process om verbanden tussen verschillende variablen te schatten. Een best passende curve vinden en de sterkte van het geschatte verband analyzeren, hoe goed stelt ons model de data voor.
-% square bcs larger errors would have a bigger error
 \pbr
 Gebruikmakende van een voorbeeld zullen we de regressie analyze nader bespreken. We kunnen bv het verband trachten te schatten tussen de inkomsten van een cafe en de temperatuur op die dag.\\
 % mathematica string data = {{23, 3213}, {21, 2089}, {25, 2253}, {18, 1801}, {13, 801}, {16, 1934}, {13, 1720}, {17, 1514}, {12, 1017}}
@@ -689,7 +688,7 @@ Nu we alles iets formeler hebben opgesteld kunnen we beginnen met zoeken naar $b
     \label{errorSum}
   \end{align}
 \end{ceqn}
-We kwadrateren hier omdat we geen negatieve waarden willen. We zouden ook de absolute waarde kunnen nemen maar dit doen we niet omdat we kleine deviaties een heel kleine impact willen laten hebben op de som en grote deviaties een grotere impact. Deze methode noemt men de \"Least squares method\" of kleinste kwadraten methode.
+We kwadrateren hier omdat we geen negatieve waarden willen. We zouden ook de absolute waarde kunnen nemen maar dit doen we niet omdat absolute waarden in een formule moeilijk zijn om verder mee te rekenen. Deze methode noemt men de \"Least squares method\" of kleinste kwadraten methode.
 \pbr
 om de waarde van $b_0$ en $b_1$ te gaan bepalen maken we gebruik van de afwijkingen.\lbr
 $X_i = x_i - \overbar{x}$ en $Y_i = y_i - \overbar{y}$. $\overbar{x}$ en $\overbar{y}$ zijn de gemiddelden en worden gegeven door.\lbr
@@ -826,9 +825,47 @@ Nudat we alles hebben berekend hebben we onze formule voor $\hat{y}$ namelijk.
   \centering
   \includegraphics[width=0.7\textwidth]{RegressieCafeScatterplotRegressionLine.jpg}
   \caption{Grafische voorstelling van onze regressielijn}
+  \label{regressionAveragesPlot}
 \end{figure}
 
+\newpage
 
+Met de kleinste kwadraten methode hebben we een best passende curve bekomen. Maar hiermee weten we echter nog niet of deze curve onze data eigenlijk wel goed voorstelt daarom gaan we de sterkte van het gevonden verband nader gaan bekijken. Hiervoor gaan we de correlatiecoëficient introduceren.
+\pbr
+Als we figuur \ref{regressionAveragesPlot} nader gaan bekijken zien we dat onze punten niet perfect op de regressielijn vallen, wat veelal het geval zal zijn. We kunnen deze deviatie in 2 delen opdelen een verklaarde deviatie en een onverklaarde deviatie.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{RegressieCafeExplainedUnexplainedDeviations.jpg}
+  \caption{Verklaarde en onverklaarde deviatie}
+  \label{regressionAveragesPlot}
+\end{figure}
+Wat we willen vinden is de fractie van de totale deviatie die verklaard is. De totale verklaarde deviatie noemen we SSR (sum of squares due to regression), de totale onverklaarde deviatie noemen we SSE (sum of squares due to error). De totale deviatie dan is SST (sum of squares total) en is dus gelijk aan $SST = SSR + SSE$. SSE en SSR worden gegeven door volgende formules\lbr
+\begin{equation}
+  SSR = \sum_{i=1}^n(\hat{y_i} - \overbar{y})^2
+  \label{SSRequation}
+\end{equation}
+\begin{equation}
+  SSE = \sum_{i=1}^n(y_i - \hat{y_i})^2
+  \label{SSEequation}
+\end{equation}
+De fractie van de totale deviatie die verklaard is noemen we de correlatiecoëficient $R^2$ en is dus gelijk aan.
+\begin{equation}
+  SSE = \frac{SSR}{SST} = \frac{\sum_{i=1}^n(\hat{y_i} - \overbar{y})^2}{\sum_{i=1}^n(y_i - \overbar{y})^2}
+  \label{R2equation}
+\end{equation}
+Formule \ref{R2equation} kunnen we nu toepassen op ons voorbeeld en zo de corelatiecoëficient bekomen.
+\begin{equation*}
+  R^2 \approx 0.6571
+\end{equation*}
+We hebben de $R^2$ nu wel berekend maar wat betekent deze nu? De fractie van de totale deviatie die verklaard is. Dit is dus een indicatie van hoe goed onze regressielijn de data voorsteld. Deze kan een waarde hebben tussen 0 en 1. Waar 1 wil zeggen dat al onze datapunten op de regressielijn liggen, SSE ofwel de totale onverklaarde deviatie zou dus 0 zijn. Hoe dichter dit getal dus bij 1 ligt des te beter onze regressielijn onze data voorstelt. Het is wel belangrijk om in onze gedachten te houden dat onze regressielijn maar een schatting is van het verband tussen x en y, dit wil niet zeggen dat er een verband is tussen x en y. De assumptie dat x en y een lineair verband hebben met elkaar hebben we in het begin gemaakt maar is niet noodzakelijk correct.
+\pbr
+Nudat we onze regressielijn hebben gevonden en de sterkte van het gevonden verband hebben bepaald kunnen we voorspellingen gaan maken. Dit kunnen we doen op 2 manieren namelijk interpolatie en extrapolatie.
+\pbr
+\textbf{Interpolatie:}\lbr
+Voorspellingen maken binnen het bereik van onze initiële data. Dit wil zeggen temperaturen tussen de 12$\degree$C en 25$\degree$C.
+\pbr
+\textbf{Extrapolatie:}\lbr
+Voorspellingen maken buiten het bereik van onze initiële data. Dit wil zeggen alles behalve het interval $[12\degree\text{C}, 25\degree\text{C}]$.
 
 % Bibliographie en bijlagen
 \printbibliography
